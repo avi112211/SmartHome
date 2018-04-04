@@ -13,19 +13,28 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 /**
  * Created by Avi on 16/02/2018.
  */
 
-public class FirebaseHandler {
-    private static final String LOGCAT = null;
+public class FirebaseHandler extends Observable {
+    private static final String TAG = FirebaseHandler.class.getName();
     private static FirebaseHandler firebaseHandler;
     private Context context;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private String settingsLabel = "settings";
+    private String personInRoomLabel = "personInRoom";
+    private String powerConsumptionHistoryLabel = "powerConsumptionHistory";
     private Map<String, String> ips = new HashMap<>();
+    private Map<String, String> personInRoomMap = new HashMap<>();
+    private Map<String, String> dataFromListener = new HashMap<>();
+    private Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>> powerConsumptionHistory = new HashMap<>();
     private boolean ipReady = false;
+    private boolean pirReady = false;
+    private boolean powerConsumptionHistoryReady = false;
+    private ValueEventListener itemListener = null;
 
     public static synchronized FirebaseHandler getInstance(Context context) {
 
@@ -46,6 +55,8 @@ public class FirebaseHandler {
     {
         this.context = context;
         ipChecker();
+        personInRoomChecker();
+        powerConsumptionHistory();
     }
 
     private void ipChecker()
@@ -54,8 +65,6 @@ public class FirebaseHandler {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
                 ips = (Map<String, String>) dataSnapshot.getValue();
                 ipReady = true;
             }
@@ -67,8 +76,76 @@ public class FirebaseHandler {
         });
     }
 
+    private void personInRoomChecker()
+    {
+        DatabaseReference myRef = database.getReference(personInRoomLabel);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                personInRoomMap = (Map<String, String>) dataSnapshot.getValue();
+                pirReady = true;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                int a = 1;
+            }
+        });
+    }
+
+    private void powerConsumptionHistory()
+    {
+        DatabaseReference myRef = database.getReference(powerConsumptionHistoryLabel);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                powerConsumptionHistory = (Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>>) dataSnapshot.getValue();
+                powerConsumptionHistoryReady = true;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                int a = 1;
+            }
+        });
+    }
+
+    public void startFBlistener(String path)
+    {
+        itemListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataFromListener = (Map<String, String>) dataSnapshot.getValue();
+                setChanged();
+                notifyObservers();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "startFBlistener:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+        DatabaseReference myRef = database.getReference(path);
+        myRef.addValueEventListener(itemListener);
+    }
+
+    public void stopFBlistener(String path)
+    {
+        if(itemListener != null)
+        {
+            DatabaseReference myRef = database.getReference(path);
+            myRef.removeEventListener(itemListener);
+        }
+    }
+
     public Map<String, String> getIps() {
         return ips;
+    }
+
+    public Map<String, String> getPersonInRoomMap() {
+        return personInRoomMap;
     }
 
     public boolean isIpReady() {
@@ -77,5 +154,29 @@ public class FirebaseHandler {
 
     public void setIpReady(boolean ipReady) {
         this.ipReady = ipReady;
+    }
+
+    public boolean isPirReady() {
+        return pirReady;
+    }
+
+    public void setPirReady(boolean pirReady) {
+        this.pirReady = pirReady;
+    }
+
+    public boolean isPowerConsumptionHistoryReady() {
+        return powerConsumptionHistoryReady;
+    }
+
+    public void setPowerConsumptionHistoryReady(boolean powerConsumptionHistoryReady) {
+        this.powerConsumptionHistoryReady = powerConsumptionHistoryReady;
+    }
+
+    public Map<String, String> getDataFromListener() {
+        return dataFromListener;
+    }
+
+    public Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>> getPowerConsumptionHistory() {
+        return powerConsumptionHistory;
     }
 }

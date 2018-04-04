@@ -1,4 +1,4 @@
-package com.example.avi.smarthome;
+package com.example.avi.smarthome.UI;
 
 
 import android.app.FragmentTransaction;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.avi.smarthome.OpenHab.OpenHabHandler;
 import com.example.avi.smarthome.OpenHab.Thing;
+import com.example.avi.smarthome.R;
 
 import java.util.ArrayList;
 
@@ -75,7 +76,7 @@ public class ThingsInRoomFragment extends Fragment implements View.OnClickListen
             else
                 btn.setText(name);
 
-            btn.setTextSize(18);
+            btn.setTextSize(14);
             btn.setTag(thing);
             btn.setOnClickListener(this);
             //tv1.setPadding(50/count, 50/count, 50/count, 50/count);
@@ -105,11 +106,16 @@ public class ThingsInRoomFragment extends Fragment implements View.OnClickListen
                         ItemFragment itemFragment = new ItemFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("label", thing.getLabel());
+                        bundle.putString("room", roomName);
+                        if(thing.getStatus() != null && !thing.getStatus().equals(""))
+                            bundle.putString("status", thing.getStatus());
+                        else
+                            bundle.putString("status", "N/A");
                         itemFragment.setArguments(bundle);
                         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragment_container, itemFragment, "bb");
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        fragmentTransaction.replace(R.id.fragment_container, itemFragment).addToBackStack("itemFrag").commit();
+                        //fragmentTransaction.addToBackStack(null);
+                        //fragmentTransaction.commit();
                         break;
                     }
                 }

@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.avi.smarthome.BootActivity">
+    tools:context="com.example.avi.smarthome.UI.BootActivity">
 
     <TextView
+        android:id="@+id/booting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="153dp"
+        android:layout_marginTop="120dp"
         android:text="Booting"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -21,7 +22,18 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/booting"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
+        android:layout_marginTop="30dp"
         android:indeterminate="false" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_below="@+id/progressBar2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:contentDescription="Logo"
+        app:srcCompat="@drawable/logo_cactus_house_color_big" />
 </RelativeLayout>

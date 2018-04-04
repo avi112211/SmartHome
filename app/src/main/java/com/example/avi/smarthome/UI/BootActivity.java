@@ -1,4 +1,4 @@
-package com.example.avi.smarthome;
+package com.example.avi.smarthome.UI;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.avi.smarthome.Firebase.FirebaseHandler;
 import com.example.avi.smarthome.OpenHab.OpenHabHandler;
+import com.example.avi.smarthome.R;
 
 public class BootActivity extends AppCompatActivity {
 
@@ -24,7 +25,7 @@ public class BootActivity extends AppCompatActivity {
             public void run()
             {
                 while (true){
-                    if(firebaseHandler.isIpReady()) {
+                    if(firebaseHandler.isIpReady() && firebaseHandler.isPirReady() && firebaseHandler.isPowerConsumptionHistoryReady()) {
                         openHabHandler = OpenHabHandler.getInstance(getApplicationContext());
                         openHabHandler.sendGet("PostGetReq?type=things", "things");
                         break;

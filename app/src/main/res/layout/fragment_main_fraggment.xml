@@ -2,14 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.avi.smarthome.MainFragment">
+    tools:context="com.example.avi.smarthome.UI.MainFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/hello_blank_fragment" />
+        android:text="No one is in the house"
+        android:textSize="30sp"
+        android:visibility="visible" />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pirtable"
+        android:textAlignment="center"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+    </TableLayout>
 
 </RelativeLayout>

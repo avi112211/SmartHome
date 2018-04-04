@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "707434755336",
+    "firebase_url": "https://smathome-b9524.firebaseio.com",
+    "project_id": "smathome-b9524",
+    "storage_bucket": "smathome-b9524.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:707434755336:android:e79e052de84b23fb",
+        "android_client_info": {
+          "package_name": "com.example.avi.smarthome"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "707434755336-bh5fk1gu3jffgqksbo4kvradaolcqo9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.avi.smarthome",
+            "certificate_hash": "f6c82f315132dd6a8e0835f47fec60bef144c141"
+          }
+        },
+        {
+          "client_id": "707434755336-mbm8c7lqjdcn4plr8dminh17qg75hik2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx61HBDj-8QSC4fFR7P7RuUdCVYjwLPPk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "707434755336-mbm8c7lqjdcn4plr8dminh17qg75hik2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

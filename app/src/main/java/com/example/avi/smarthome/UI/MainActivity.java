@@ -1,5 +1,6 @@
-package com.example.avi.smarthome;
+package com.example.avi.smarthome.UI;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -8,11 +9,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.avi.smarthome.Firebase.FirebaseHandler;
 import com.example.avi.smarthome.OpenHab.OpenHabHandler;
 import com.example.avi.smarthome.OpenHab.Thing;
+import com.example.avi.smarthome.R;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -55,7 +59,14 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            Log.i("MainActivity", "popping backstack");
+            fm.popBackStack();
         } else {
+            Log.i("MainActivity", "nothing on backstack, calling super");
             super.onBackPressed();
         }
     }
@@ -113,7 +124,11 @@ public class MainActivity extends AppCompatActivity
 
         for(String roomName : thingsPerRoom.keySet()){
             submenu.add(roomName);
-        }
+    }
+
+        FirebaseHandler firebaseHandler = FirebaseHandler.getInstance(getApplicationContext());
+        if(!firebaseHandler.getPowerConsumptionHistory().isEmpty())
+            submenu.add("Power Consumption History");
 
         navView.invalidate();
     }

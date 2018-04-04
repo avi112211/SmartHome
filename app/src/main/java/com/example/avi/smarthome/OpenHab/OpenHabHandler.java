@@ -3,6 +3,7 @@ package com.example.avi.smarthome.OpenHab;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -110,7 +111,9 @@ public class OpenHabHandler {
 
     public void sendPost(String url, String type, Object val) {
         StringRequest request = new StringRequest(Request.Method.POST, URL + url, onPostLoaded, onPostError);
+        request.setRetryPolicy(new DefaultRetryPolicy(10 * 1000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(request);
+
     }
 
     private final Response.Listener<String> onPostLoaded = new Response.Listener<String>() {
