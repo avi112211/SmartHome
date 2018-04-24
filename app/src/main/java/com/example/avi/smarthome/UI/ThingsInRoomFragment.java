@@ -2,6 +2,7 @@ package com.example.avi.smarthome.UI;
 
 
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class ThingsInRoomFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         View v = inflater.inflate(R.layout.fragment_things_in_room, container, false);
         openHabHandler = OpenHabHandler.getInstance(getActivity().getApplicationContext());
 

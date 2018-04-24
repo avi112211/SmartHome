@@ -2,6 +2,7 @@ package com.example.avi.smarthome.UI;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +20,7 @@ import com.example.avi.smarthome.OpenHab.Thing;
 import com.example.avi.smarthome.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
@@ -27,10 +29,12 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView = null;
     Toolbar toolbar = null;
     OpenHabHandler openHabHandler = null;
+    private Map<String, String> listElToClass = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
         openHabHandler = OpenHabHandler.getInstance(getApplicationContext());
 
@@ -80,16 +84,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -97,16 +95,37 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        String room = item.toString();
-
+        String el = item.toString();
 
         //fragmentTransaction
-        ThingsInRoomFragment thingsInRoomFragment = new ThingsInRoomFragment();
+        ThingsInRoomFragment thingsInRoomFragment;
+        PowerConsumptionHistoryFragment powerConsumptionHistoryFragment;
+        LiveCameraFragment liveCameraFragment;
+
         Bundle bundle = new Bundle();
-        bundle.putString("roomName", room);
-        thingsInRoomFragment.setArguments(bundle);
+        bundle.putString("roomName", el);
+
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, thingsInRoomFragment, "main");
+
+        switch (listElToClass.get(el)) {
+            case "roomFragment":
+                thingsInRoomFragment = new ThingsInRoomFragment();
+                thingsInRoomFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_container, thingsInRoomFragment, "main");
+                break;
+            case "powerConsumptionHistoryFragment":
+                powerConsumptionHistoryFragment = new PowerConsumptionHistoryFragment();
+                powerConsumptionHistoryFragment.setArguments(bundle);
+                fragmentTransaction.replace(R.id.fragment_container, powerConsumptionHistoryFragment, "main");
+                break;
+            case "liveCameraFragment":
+                liveCameraFragment = new LiveCameraFragment();
+                fragmentTransaction.replace(R.id.fragment_container, liveCameraFragment, "main");
+                break;
+            default:
+                break;
+        }
+
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -124,11 +143,19 @@ public class MainActivity extends AppCompatActivity
 
         for(String roomName : thingsPerRoom.keySet()){
             submenu.add(roomName);
+            listElToClass.put(roomName, "roomFragment");
     }
 
         FirebaseHandler firebaseHandler = FirebaseHandler.getInstance(getApplicationContext());
-        if(!firebaseHandler.getPowerConsumptionHistory().isEmpty())
+        if(!firebaseHandler.getPowerConsumptionHistory().isEmpty()) {
             submenu.add("Power Consumption History");
+            listElToClass.put("Power Consumption History", "powerConsumptionHistoryFragment");
+        }
+
+
+        submenu.add("Live Camera");
+        listElToClass.put("Live Camera", "liveCameraFragment");
+
 
         navView.invalidate();
     }

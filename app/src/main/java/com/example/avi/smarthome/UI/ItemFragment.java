@@ -63,6 +63,7 @@ public class ItemFragment extends Fragment implements SeekBar.OnSeekBarChangeLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         View v = inflater.inflate(R.layout.fragment_item, container, false);
         firstRun = true;
         openHabHandler = OpenHabHandler.getInstance(getActivity().getApplicationContext());
@@ -494,6 +495,8 @@ public class ItemFragment extends Fragment implements SeekBar.OnSeekBarChangeLis
         else
         {
             String val = e.getText().toString();
+            if(val.trim().isEmpty())
+                return;
             Item item = (Item) v.getTag();
             String numberVal = "";
             if(item.getStateDescription().getPattern().toLowerCase().contains("d"))

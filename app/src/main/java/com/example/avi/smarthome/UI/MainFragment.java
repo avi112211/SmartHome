@@ -1,5 +1,6 @@
 package com.example.avi.smarthome.UI;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,17 +38,15 @@ public class MainFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         View v = inflater.inflate(R.layout.fragment_main_fraggment, container, false);
         firebaseHandler = FirebaseHandler.getInstance(getActivity().getApplicationContext());
         personInRoomMap = firebaseHandler.getPersonInRoomMap();
         textView = (TextView) v.findViewById(R.id.tv);
         tableLayout = (TableLayout) v.findViewById(R.id.pirtable);
 
-        if(!personInRoomMap.isEmpty())
-            buildPir();
-
-        firebaseHandler.addObserver(this);
-        firebaseHandler.startFBlistener(path);
+        //firebaseHandler.addObserver(this);
+        //firebaseHandler.startFBlistener(path);
 
         return v;
     }
@@ -83,10 +82,18 @@ public class MainFragment extends Fragment implements Observer {
     }
 
     @Override
-    public void onDestroy() {
-        //firstRun = true;
-        firebaseHandler.stopFBlistener(path);
-        firebaseHandler.deleteObserver(this);
-        super.onDestroy();
+    public void onPause() {
+        if(firebaseHandler != null) {
+            firebaseHandler.stopFBlistener(path);
+            firebaseHandler.deleteObserver(this);
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        firebaseHandler.addObserver(this);
+        firebaseHandler.startFBlistener(path);
+        super.onResume();
     }
 }

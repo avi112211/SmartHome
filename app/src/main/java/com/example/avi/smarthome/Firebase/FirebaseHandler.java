@@ -30,7 +30,7 @@ public class FirebaseHandler extends Observable {
     private Map<String, String> ips = new HashMap<>();
     private Map<String, String> personInRoomMap = new HashMap<>();
     private Map<String, String> dataFromListener = new HashMap<>();
-    private Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>> powerConsumptionHistory = new HashMap<>();
+    private Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Number>>>>>> powerConsumptionHistory = new HashMap<>();
     private boolean ipReady = false;
     private boolean pirReady = false;
     private boolean powerConsumptionHistoryReady = false;
@@ -99,7 +99,7 @@ public class FirebaseHandler extends Observable {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                powerConsumptionHistory = (Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>>) dataSnapshot.getValue();
+                powerConsumptionHistory = (Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Number>>>>>>) dataSnapshot.getValue();
                 powerConsumptionHistoryReady = true;
             }
 
@@ -176,7 +176,7 @@ public class FirebaseHandler extends Observable {
         return dataFromListener;
     }
 
-    public Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Double>>>>>> getPowerConsumptionHistory() {
+    public Map<String, Map<String, Map<String, Map<String, Map<String, Map<String, Number>>>>>> getPowerConsumptionHistory() {
         return powerConsumptionHistory;
     }
 }
